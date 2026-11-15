@@ -2,10 +2,11 @@ services:
   - type: web
     name: whatsapp-agent-backend
     env: node
+    runtime: node
     region: ohio
     plan: free
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: node src/index.js
     autoDeploy: true
     envVars:
       - key: NODE_ENV
