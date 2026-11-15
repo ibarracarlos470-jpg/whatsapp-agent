@@ -1,7 +1,10 @@
-# Backend - WhatsApp Agent
+# Backend - SP360 WhatsApp Agent
 FROM node:18-alpine
 
 WORKDIR /app
+
+# Forzar nuevo build
+RUN echo "SP360 Agent Build $(date)" > /app/BUILD_INFO.txt
 
 # Copiar archivos de configuración
 COPY package*.json ./
