@@ -26,7 +26,7 @@ app.use('/api/companies', companyRoutes);
 app.use('/api/agents', agentRoutes);
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'healthy', message: 'WhatsApp Agent is running' });
+  res.json({ status: 'healthy', message: 'SP360 WhatsApp Agent running' });
 });
 
 // Servir página de login
