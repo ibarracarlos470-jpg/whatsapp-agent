@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0066cc 0%, #003d99 100%);
   padding: 2rem;
 }
 
@@ -113,4 +113,21 @@
 
 .link-btn:hover {
   color: #5568d3;
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.sp360-logo {
+  display: inline-block;
+  background: linear-gradient(135deg, #0066cc 0%, #ff6600 100%);
+  color: white;
+  font-weight: 900;
+  font-size: 1.8rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  letter-spacing: 2px;
+  box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
 }

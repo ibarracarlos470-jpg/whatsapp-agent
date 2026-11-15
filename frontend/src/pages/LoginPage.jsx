@@ -62,8 +62,11 @@ function LoginPage({ onLogin }) {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>🤖 WhatsApp Agent</h1>
-        <p className="subtitle">Agente de IA para atención al cliente</p>
+        <div className="logo-container">
+          <div className="sp360-logo">SP360</div>
+        </div>
+        <h1>SP360</h1>
+        <p className="subtitle">Soluciones Inteligentes para tu Negocio</p>
 
         {error && <div className="error-message">{error}</div>}
 
