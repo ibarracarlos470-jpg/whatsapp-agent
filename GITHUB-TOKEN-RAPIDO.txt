@@ -1,0 +1,75 @@
+================================================================================
+   OBTENER GITHUB TOKEN - GUIA RAPIDA
+================================================================================
+
+PASO 1: ABRE GITHUB SETTINGS
+   -> Ve a: https://github.com/settings/tokens
+   -> O: Click en tu avatar (arriba a la derecha) > Settings > Developer settings > Personal access tokens > Tokens (classic)
+
+PASO 2: GENERA UN NUEVO TOKEN
+   -> Click en "Generate new token (classic)"
+   -> En "Note": escribe "WhatsApp Agent Deploy"
+
+PASO 3: SELECCIONA PERMISOS (SCOPES)
+   Marca SOLO estos:
+   ✓ repo (Full control of private repositories)
+     - Incluye: repo:status, repo_deployment, public_repo, repo:write:repo_hook
+
+   NO necesitas otros permisos
+
+PASO 4: GENERA Y COPIA
+   -> Click en "Generate token" (al final de la página)
+   -> IMPORTANTE: Copia el token INMEDIATAMENTE
+   -> No puedes verlo de nuevo - si lo pierdes, genera otro
+
+PASO 5: USA EL TOKEN EN EL SCRIPT
+   -> El script te pedirá: "Pega tu GitHub token aquí"
+   -> Pega el token que copiaste
+   -> Presiona ENTER
+
+================================================================================
+   SEGURIDAD
+================================================================================
+
+- NO compartas este token con nadie
+- NO lo incluyas en código o archivos
+- Si lo expones accidentalmente:
+  1. Ve a https://github.com/settings/tokens
+  2. Click en el token
+  3. Click "Delete"
+  4. Genera uno nuevo
+
+- El token expira después del tiempo que selecciones
+- Recomendado: 30 días para desarrollo
+
+================================================================================
+   TROUBLESHOOTING
+================================================================================
+
+Si el script falla diciendo "repositorio ya existe":
+   -> Ya creaste whatsapp-agent antes
+   -> Opción 1: Borra el repo desde GitHub y ejecuta de nuevo
+   -> Opción 2: Modifica el nombre en el script (línea 42: $repoName = "...")
+
+Si falla por "token inválido":
+   -> Asegúrate de copiar TODO el token (sin espacios)
+   -> Verifica que esté activo (no expirado)
+   -> Genera uno nuevo si es necesario
+
+Si Git no se reconoce:
+   -> Instala Git desde: https://git-scm.com/download/win
+   -> Reinicia PowerShell como Administrador
+   -> Ejecuta el script de nuevo
+
+================================================================================
+   LISTO?
+================================================================================
+
+1. Obtén tu token siguiendo los pasos arriba
+2. Guárdalo en un lugar seguro (portapapeles)
+3. Ejecuta: DEPLOY-GITHUB-RENDER.ps1 como Administrador
+4. Pega el token cuando lo pida
+5. ¡Espera a que termine!
+
+EN VIVO EN 10 MINUTOS!
+================================================================================
