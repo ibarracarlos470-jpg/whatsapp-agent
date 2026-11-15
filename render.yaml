@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: sp360-whatsapp-agent
+    env: node
+    plan: starter
+    buildCommand: npm ci --only=production
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: WHATSAPP_API_TOKEN
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+    staticPublicPath: frontend/dist
