@@ -1,13 +1,11 @@
 services:
   - type: web
-    name: whatsapp-agent-backend
+    name: sp360-agent-api
     env: node
-    runtime: node
     region: ohio
     plan: free
     buildCommand: npm install
     startCommand: node src/index.js
-    autoDeploy: true
     envVars:
       - key: NODE_ENV
         value: production
