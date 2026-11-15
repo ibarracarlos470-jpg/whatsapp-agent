@@ -1,0 +1,204 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                   DEPLOY A HEROKU - WHATSAPP AGENT                        ║
+║                                                                            ║
+║                     GUÍA DE INICIO RÁPIDO - 3 PASOS                       ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+
+┌─ REQUISITOS ANTES DE EMPEZAR ──────────────────────────────────────────┐
+│                                                                         │
+│  ✓ Heroku CLI instalado                                                │
+│  ✓ Autenticación en Heroku (se pedirá durante el proceso)              │
+│  ✓ Git instalado                                                       │
+│  ✓ Variables de entorno en .env (ya configuradas)                     │
+│  ✓ PowerShell 7 o superior                                             │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+OPCIÓN A: DEPLOY AUTOMÁTICO (RECOMENDADO) - 5 CLICS
+═══════════════════════════════════════════════════════════════════════════
+
+1. Abre el Explorador de Archivos (Windows Explorer)
+2. Ve a: C:\Users\Marcelo\Proyecto\Agentes\whatsapp-agent
+3. Busca el archivo: deploy-heroku-final.bat
+4. CLICK DERECHO en deploy-heroku-final.bat
+5. Selecciona: "Ejecutar como administrador"
+
+┌─ QUÉ HARÁ EL SCRIPT ───────────────────────────────────────────────────┐
+│                                                                         │
+│  El script ejecutará automáticamente:                                  │
+│                                                                         │
+│  • Iniciar sesión en Heroku (si es necesario)                          │
+│  • Inicializar Git                                                     │
+│  • Crear app en Heroku: whatsapp-agent-marcelo                         │
+│  • Configurar variables de entorno                                     │
+│  • Hacer push del código                                               │
+│  • Esperar compilación (2-3 minutos)                                   │
+│  • Verificar que está corriendo                                        │
+│  • Mostrar la URL de acceso                                            │
+│                                                                         │
+│  TIEMPO TOTAL: 4-6 minutos                                             │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+OPCIÓN B: VERIFICACIÓN PRE-DEPLOY
+═══════════════════════════════════════════════════════════════════════════
+
+Antes de hacer el deploy, verifica que todo está listo:
+
+1. Abre PowerShell como ADMINISTRADOR
+2. Ejecuta el comando:
+
+   cd C:\Users\Marcelo\Proyecto\Agentes\whatsapp-agent
+   .\verificar-deploy.ps1
+
+3. Revisa el resultado - debería mostrar ✓ en todos los items
+4. Si todo está OK, ejecuta: deploy-heroku-final.bat
+
+
+═══════════════════════════════════════════════════════════════════════════
+OPCIÓN C: DEPLOY MANUAL PASO A PASO
+═══════════════════════════════════════════════════════════════════════════
+
+Si prefieres hacerlo manualmente en PowerShell (Admin):
+
+$ cd C:\Users\Marcelo\Proyecto\Agentes\whatsapp-agent
+
+# 1. Login en Heroku
+$ & "C:\Program Files\Heroku\bin\heroku.cmd" login
+
+# 2. Inicializar Git
+$ git init
+$ git config user.name "Marcelo"
+$ git config user.email "marcelo@whatsapp.local"
+$ git add .
+$ git commit -m "WhatsApp Agent - Deploy a Heroku"
+
+# 3. Crear app en Heroku
+$ & "C:\Program Files\Heroku\bin\heroku.cmd" create whatsapp-agent-marcelo
+
+# 4. Configurar variables (TODO EN UNA LÍNEA)
+$ & "C:\Program Files\Heroku\bin\heroku.cmd" config:set -a whatsapp-agent-marcelo `
+  GEMINI_API_KEY=AQ.Ab8RN6I592w8SiaxYQj4uTcNhu66_5-MdBdOU0Oa0zJTb8kZBg `
+  WHATSAPP_API_TOKEN=EAAepZB3wn6wIBS2Lov8G2EYGGXzAJi53IZAguJghAYRKEtSYapRnofF0bk5tL6YcttGZBkW7mKZCEEOiFsAdMpd2VZBOYdfmCNbflxsyFcr2fC7ZA12CVhZBwXOMJGaGT9PYsZAZBRO6ZBYzbrRXyBwAdkg0yeRRGHPyYjpwn862GGBhNAmzBL6Gz8VPFLjUrh9biQifgyb8cSc9KZC8MATvHZBLpwWr2RsonDMeeZAb39wFH5xHlEDcO1UZALDyZCJAABXqQQikGDtWtYMVj3ZCjsuM2siYZBQZDZD `
+  WHATSAPP_PHONE_NUMBER_ID=1234567890 `
+  META_VERIFY_TOKEN=e24e347dcb0a98b4e98a95a467718248 `
+  JWT_SECRET=tu_jwt_mega_secreto_seguro_123 `
+  NODE_ENV=production
+
+# 5. Hacer push a Heroku (toma 2-3 minutos)
+$ & "C:\Program Files\Heroku\bin\heroku.cmd" git:remote -a whatsapp-agent-marcelo
+$ git push heroku main
+
+
+═══════════════════════════════════════════════════════════════════════════
+VERIFICAR QUE EL DEPLOY FUE EXITOSO
+═══════════════════════════════════════════════════════════════════════════
+
+Después de 4-6 minutos, verifica:
+
+1. En la terminal, busca la línea:
+   "remote: -----> Application deployed to the web"
+
+2. Abre en navegador:
+   https://whatsapp-agent-marcelo.herokuapp.com/health
+
+3. Debería mostrar:
+   {"status":"healthy","message":"WhatsApp Agent is running"}
+
+4. Si funciona, ¡DEPLOY EXITOSO! ✓
+
+
+═══════════════════════════════════════════════════════════════════════════
+INFORMACIÓN DE LA APP DESPLEGADA
+═══════════════════════════════════════════════════════════════════════════
+
+Nombre:              whatsapp-agent-marcelo
+URL Principal:       https://whatsapp-agent-marcelo.herokuapp.com
+Health Check:        https://whatsapp-agent-marcelo.herokuapp.com/health
+Dashboard Heroku:    https://dashboard.heroku.com/apps/whatsapp-agent-marcelo
+
+Variables configuradas:
+  • GEMINI_API_KEY .......................... Configurada
+  • WHATSAPP_API_TOKEN ..................... Configurada
+  • WHATSAPP_PHONE_NUMBER_ID .............. 1234567890
+  • META_VERIFY_TOKEN ..................... Configurada
+  • JWT_SECRET ............................. Configurada
+  • NODE_ENV ............................... production
+
+
+═══════════════════════════════════════════════════════════════════════════
+COMANDOS ÚTILES DESPUÉS DEL DEPLOY
+═══════════════════════════════════════════════════════════════════════════
+
+Ver logs en tiempo real:
+$ heroku logs --tail -a whatsapp-agent-marcelo
+
+Abrir la app en navegador:
+$ heroku open -a whatsapp-agent-marcelo
+
+Ver todas las variables:
+$ heroku config -a whatsapp-agent-marcelo
+
+Reiniciar la app:
+$ heroku restart -a whatsapp-agent-marcelo
+
+Ver estado de procesos:
+$ heroku ps -a whatsapp-agent-marcelo
+
+
+═══════════════════════════════════════════════════════════════════════════
+SOLUCIÓN DE PROBLEMAS
+═══════════════════════════════════════════════════════════════════════════
+
+P: ¿Qué pasa si me pide login en Heroku?
+R: Se abrirá un navegador, inicia sesión con tu cuenta de Heroku y vuelve
+   a la terminal
+
+P: ¿Mi app no responde en la URL?
+R: Es posible que aún esté compilando (toma 2-3 minutos)
+   Espera 30 segundos más y vuelve a intentar
+
+P: ¿Cómo veo los errores?
+R: Ejecuta: heroku logs --tail -a whatsapp-agent-marcelo
+   Mostrará los últimos logs en tiempo real
+
+P: ¿Cómo reinicio la app si algo sale mal?
+R: Ejecuta: heroku restart -a whatsapp-agent-marcelo
+
+P: ¿Cómo modifico las variables de entorno?
+R: heroku config:set -a whatsapp-agent-marcelo VARIABLE=valor
+
+P: Git está bloqueado
+R: Ejecuta PowerShell como ADMINISTRADOR antes de cualquier comando git
+
+
+═══════════════════════════════════════════════════════════════════════════
+ARCHIVOS RELACIONADOS
+═══════════════════════════════════════════════════════════════════════════
+
+Para instrucciones más detalladas, consulta:
+  • DEPLOY-HEROKU-INSTRUCCIONES.txt .... Guía completa con todas las opciones
+  • README-DEPLOY.txt ................... Información técnica detallada
+  • deploy-heroku-final.ps1 ............ Script PowerShell (para revisar)
+  • deploy-heroku-final.bat ............ Script Windows (ejecutar)
+  • verificar-deploy.ps1 ............... Verificación pre-deploy
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+¿LISTO PARA EMPEZAR?
+
+Paso 1: Click derecho en deploy-heroku-final.bat
+Paso 2: Selecciona "Ejecutar como administrador"
+Paso 3: Espera 4-6 minutos
+Paso 4: Abre https://whatsapp-agent-marcelo.herokuapp.com/health
+Paso 5: ¡LISTO! Tu app está en vivo
+
+═══════════════════════════════════════════════════════════════════════════

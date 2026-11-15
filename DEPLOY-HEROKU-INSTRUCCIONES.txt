@@ -1,0 +1,98 @@
+================================================================================
+DESPLIEGUE A HEROKU - WHATSAPP AGENT
+================================================================================
+
+OPCIÓN 1: EJECUTAR SCRIPT BATCH (MÁS FÁCIL)
+================================================================================
+
+1. Abre el Explorador de Archivos
+2. Ve a: C:\Users\Marcelo\Proyecto\Agentes\whatsapp-agent
+3. Busca el archivo: deploy-heroku-final.bat
+4. Click derecho → "Ejecutar como administrador"
+5. Sigue las instrucciones en la ventana que se abre
+6. El script hará todo automáticamente:
+   - Verificará la autenticación en Heroku (puede pedir login)
+   - Inicializará Git si es necesario
+   - Creará la app en Heroku
+   - Configurará todas las variables de entorno
+   - Hará el push del código
+   - Verificará que la app esté corriendo
+
+OPCIÓN 2: EJECUTAR SCRIPT POWERSHELL DIRECTAMENTE
+================================================================================
+
+1. Abre PowerShell
+2. Click derecho → "Ejecutar como administrador"
+3. Ejecuta este comando:
+
+   Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
+   & "C:\Users\Marcelo\Proyecto\Agentes\whatsapp-agent\deploy-heroku-final.ps1"
+
+OPCIÓN 3: COMANDOS MANUALES
+================================================================================
+
+Si prefieres hacerlo paso a paso:
+
+1. Abre PowerShell como administrador
+2. Ve al directorio:
+   cd C:\Users\Marcelo\Proyecto\Agentes\whatsapp-agent
+
+3. Inicia sesión en Heroku:
+   & "C:\Program Files\Heroku\bin\heroku.cmd" login
+
+4. Inicializa Git (si no está inicializado):
+   git init
+   git config user.name "Marcelo"
+   git config user.email "marcelo@whatsapp.local"
+   git add .
+   git commit -m "WhatsApp Agent - Deploy a Heroku"
+
+5. Crea la app en Heroku:
+   & "C:\Program Files\Heroku\bin\heroku.cmd" create whatsapp-agent-marcelo
+
+6. Configura las variables de entorno:
+   & "C:\Program Files\Heroku\bin\heroku.cmd" config:set -a whatsapp-agent-marcelo GEMINI_API_KEY=AQ.Ab8RN6I592w8SiaxYQj4uTcNhu66_5-MdBdOU0Oa0zJTb8kZBg WHATSAPP_API_TOKEN=EAAepZB3wn6wIBS2Lov8G2EYGGXzAJi53IZAguJghAYRKEtSYapRnofF0bk5tL6YcttGZBkW7mKZCEEOiFsAdMpd2VZBOYdfmCNbflxsyFcr2fC7ZA12CVhZBwXOMJGaGT9PYsZAZBRO6ZBYzbrRXyBwAdkg0yeRRGHPyYjpwn862GGBhNAmzBL6Gz8VPFLjUrh9biQifgyb8cSc9KZC8MATvHZBLpwWr2RsonDMeeZAb39wFH5xHlEDcO1UZALDyZCJAABXqQQikGDtWtYMVj3ZCjsuM2siYZBQZDZD WHATSAPP_PHONE_NUMBER_ID=1234567890 META_VERIFY_TOKEN=e24e347dcb0a98b4e98a95a467718248 JWT_SECRET=tu_jwt_mega_secreto_seguro_123 NODE_ENV=production
+
+7. Agrega el remote de Heroku:
+   & "C:\Program Files\Heroku\bin\heroku.cmd" git:remote -a whatsapp-agent-marcelo
+
+8. Haz push a Heroku (esto toma 2-3 minutos):
+   git push heroku main
+
+9. Verifica que la app está corriendo:
+   https://whatsapp-agent-marcelo.herokuapp.com/health
+
+   Deberías ver una respuesta como:
+   {"status":"healthy","message":"WhatsApp Agent is running"}
+
+QUÉ SUCEDE SI HAY ERRORES
+================================================================================
+
+Si la app no inicia:
+1. Ve los logs: heroku logs --tail -a whatsapp-agent-marcelo
+2. Verifica las variables de entorno: heroku config -a whatsapp-agent-marcelo
+3. Intenta reiniciar: heroku restart -a whatsapp-agent-marcelo
+
+Si Git está bloqueado:
+1. Asegúrate de estar en PowerShell como administrador
+2. Intenta ejecutar el script batch en su lugar
+
+Si Heroku no está disponible en PATH:
+- El script usa la ruta completa: C:\Program Files\Heroku\bin\heroku.cmd
+
+DESPUÉS DEL DEPLOY
+================================================================================
+
+URLs importantes:
+- App: https://whatsapp-agent-marcelo.herokuapp.com
+- Health: https://whatsapp-agent-marcelo.herokuapp.com/health
+- Logs: heroku logs --tail -a whatsapp-agent-marcelo
+- Dashboard: https://dashboard.heroku.com/apps/whatsapp-agent-marcelo
+
+Datos adicionales:
+- Tu app está corriendo en: https://whatsapp-agent-marcelo.herokuapp.com
+- Reinicia: heroku restart -a whatsapp-agent-marcelo
+- Ver procesos: heroku ps -a whatsapp-agent-marcelo
+- Ver base de datos: heroku pg:psql -a whatsapp-agent-marcelo (si usas PostgreSQL)
+
+================================================================================

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Agent - Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h1 {
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            color: #667eea;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .agent-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .agent-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .status-badge {
+            background: #d4edda;
+            color: #155724;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .toggle-mode {
+            text-align: center;
+            color: #666;
+            margin-top: 1.5rem;
+        }
+
+        .link-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background: #f9f9f9;
+            border-bottom: 2px solid #ddd;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background: #f5f5f5;
+        }
+
+        .welcome-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-start {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            margin: 1.5rem 0;
+        }
+
+        .quick-start h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .quick-start ol {
+            margin-left: 1.5rem;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .info-card {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-card h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .agents-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="login-box">
+                <h1 style="text-align: center; font-size: 2rem; color: #333; margin-bottom: 0.5rem;">🤖 WhatsApp Agent</h1>
+                <p style="text-align: center; color: #666; margin-bottom: 2rem;">Agente de IA para atención al cliente</p>
+
+                <form onsubmit="handleRegister(event)">
+                    <h2>Registrar Empresa</h2>
+
+                    <div class="form-group">
+                        <label>Nombre de Empresa</label>
+                        <input type="text" placeholder="Mi Empresa" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="admin@empresa.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Industria</label>
+                        <select style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <option>E-commerce</option>
+                            <option>Servicios</option>
+                            <option>Educación</option>
+                            <option>Salud</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn" style="width: 100%;">Registrarse</button>
+
+                    <div class="toggle-mode">
+                        ¿Ya tienes cuenta? <button type="button" class="link-btn" onclick="alert('Demo: Acceso directo para prueba')">Inicia sesión</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div id="dashboardPage" class="page">
+        <div class="navbar">
+            <div class="nav-brand">
+                <h1>🤖 WhatsApp Agent</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a onclick="showPage('dashboardPage')">Dashboard</a></li>
+                <li><a onclick="showPage('agentsPage')">Agentes</a></li>
+                <li><a onclick="showPage('conversationsPage')">Conversaciones</a></li>
+                <li><button class="logout-btn" onclick="showPage('loginPage')">Logout</button></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <h1>Dashboard</h1>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Conversaciones</div>
+                    <div class="stat-value">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Mensajes</div>
+                    <div class="stat-value">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Agentes Activos</div>
+                    <div class="stat-value">1</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Plan</div>
+                    <div class="stat-value">Starter</div>
+                </div>
+            </div>
+
+            <div class="welcome-section">
+                <h2>Bienvenido a WhatsApp Agent</h2>
+                <p>Tu agente de IA está listo para atender clientes 24/7</p>
+
+                <div class="quick-start">
+                    <h3>Inicio Rápido:</h3>
+                    <ol>
+                        <li>✅ <strong>Backend:</strong> Corriendo en puerto 3000</li>
+                        <li>✅ <strong>Base de datos:</strong> SQLite sincronizada</li>
+                        <li>🔧 <strong>Crear agente:</strong> Ve a la sección Agentes</li>
+                        <li>🔗 <strong>Conectar WhatsApp:</strong> Configura webhook en Meta</li>
+                        <li>💬 <strong>Ver conversaciones:</strong> Aparecerán aquí en tiempo real</li>
+                    </ol>
+                </div>
+
+                <div class="info-cards">
+                    <div class="info-card">
+                        <h4>📡 API Disponible</h4>
+                        <p>Todos los endpoints están listos. Consulta la documentación.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>🤖 IA Gemini</h4>
+                        <p>Tus agentes usan Google Gemini para respuestas inteligentes.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>🔐 Multi-tenant</h4>
+                        <p>Cada empresa tiene su propio espacio aislado.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AGENTS PAGE -->
+    <div id="agentsPage" class="page">
+        <div class="navbar">
+            <div class="nav-brand">
+                <h1>🤖 WhatsApp Agent</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a onclick="showPage('dashboardPage')">Dashboard</a></li>
+                <li><a onclick="showPage('agentsPage')">Agentes</a></li>
+                <li><a onclick="showPage('conversationsPage')">Conversaciones</a></li>
+                <li><button class="logout-btn" onclick="showPage('loginPage')">Logout</button></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <div class="page-header">
+                <h1>Mis Agentes</h1>
+                <button class="btn" onclick="alert('Modal de creación de agente')">➕ Crear Agente</button>
+            </div>
+
+            <div class="agents-grid">
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-name">Agente de Soporte</div>
+                        <span class="status-badge">🟢 Activo</span>
+                    </div>
+                    <p style="color: #666; margin: 0.5rem 0;">Temperatura: 0.7</p>
+                    <p style="color: #666; margin: 0.5rem 0; font-size: 0.9rem;">Eres un asistente de soporte técnico profesional...</p>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <button class="btn btn-secondary">✏️ Editar</button>
+                        <button class="btn btn-secondary">🗑️ Eliminar</button>
+                    </div>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-name">Agente de Ventas</div>
+                        <span class="status-badge">🟢 Activo</span>
+                    </div>
+                    <p style="color: #666; margin: 0.5rem 0;">Temperatura: 0.8</p>
+                    <p style="color: #666; margin: 0.5rem 0; font-size: 0.9rem;">Eres un vendedor profesional que ayuda...</p>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <button class="btn btn-secondary">✏️ Editar</button>
+                        <button class="btn btn-secondary">🗑️ Eliminar</button>
+                    </div>
+                </div>
+
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-name">Agente de Atención</div>
+                        <span class="status-badge">🟢 Activo</span>
+                    </div>
+                    <p style="color: #666; margin: 0.5rem 0;">Temperatura: 0.6</p>
+                    <p style="color: #666; margin: 0.5rem 0; font-size: 0.9rem;">Eres amable y paciente, ayudas a clientes...</p>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <button class="btn btn-secondary">✏️ Editar</button>
+                        <button class="btn btn-secondary">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONVERSATIONS PAGE -->
+    <div id="conversationsPage" class="page">
+        <div class="navbar">
+            <div class="nav-brand">
+                <h1>🤖 WhatsApp Agent</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a onclick="showPage('dashboardPage')">Dashboard</a></li>
+                <li><a onclick="showPage('agentsPage')">Agentes</a></li>
+                <li><a onclick="showPage('conversationsPage')">Conversaciones</a></li>
+                <li><button class="logout-btn" onclick="showPage('loginPage')">Logout</button></li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <h1>💬 Conversaciones</h1>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Plataforma</th>
+                        <th>Estado</th>
+                        <th>Mensajes</th>
+                        <th>Último Mensaje</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div style="font-weight: 600;">Juan García</div>
+                            <div style="color: #999; font-size: 0.85rem;">+54 9 1234567890</div>
+                        </td>
+                        <td>📱 WhatsApp</td>
+                        <td><span class="status-badge">🟢 Activa</span></td>
+                        <td>12</td>
+                        <td>Hace 2 minutos</td>
+                        <td><button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Ver</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="font-weight: 600;">María López</div>
+                            <div style="color: #999; font-size: 0.85rem;">+54 9 9876543210</div>
+                        </td>
+                        <td>📱 WhatsApp</td>
+                        <td><span class="status-badge">🟢 Activa</span></td>
+                        <td>5</td>
+                        <td>Hace 5 minutos</td>
+                        <td><button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Ver</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="font-weight: 600;">Carlos Rodríguez</div>
+                            <div style="color: #999; font-size: 0.85rem;">+54 9 5555555555</div>
+                        </td>
+                        <td>📷 Instagram</td>
+                        <td><span class="status-badge">🟢 Activa</span></td>
+                        <td>8</td>
+                        <td>Hace 10 minutos</td>
+                        <td><button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Ver</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            showPage('dashboardPage');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+build:
+  docker:
+    web: Dockerfile
+  config:
+    BUILDPACK_URL: https://github.com/heroku/heroku-buildpack-nodejs.git
+
+release:
+  image: web
+  command:
+    - npm install
+
+run:
+  web:
+    command: npm start
+    port: 3000
