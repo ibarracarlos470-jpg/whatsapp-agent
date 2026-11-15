@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
+const path = require('path');
 const config = require('./config');
 const sequelize = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
@@ -16,6 +17,9 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
+// Servir archivos estáticos del frontend compilado
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
 app.use('/api/auth', authRoutes);
 app.use('/api/webhook', webhookRoutes);
 app.use('/api/companies', companyRoutes);
@@ -23,6 +27,11 @@ app.use('/api/agents', agentRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'healthy', message: 'WhatsApp Agent is running' });
+});
+
+// Fallback para React Router - servir index.html para rutas no-API
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 async function initDatabase() {
