@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const config = require('./config');
 const sequelize = require('./config/database');
+const authRoutes = require('./routes/authRoutes');
 const webhookRoutes = require('./routes/webhookRoutes');
 const companyRoutes = require('./routes/companyRoutes');
 const agentRoutes = require('./routes/agentRoutes');
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
+app.use('/api/auth', authRoutes);
 app.use('/api/webhook', webhookRoutes);
 app.use('/api/companies', companyRoutes);
 app.use('/api/agents', agentRoutes);
